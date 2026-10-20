@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8e6c9">
+  <title>Кымбаттын 60 жаш мааракеси</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #fff8ed;
+      color: #bd8330;
+    }
+
+    /* БИРИНЧИ ЭКРАН: КОНВЕРТ */
+    #cover {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f8e6c9;
+      overflow: hidden;
+      transition: opacity 0.8s ease,
+                  transform 0.8s ease;
+    }
+
+    #cover img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    #openButton {
+      position: relative;
+      z-index: 2;
+      width: 190px;
+      height: 190px;
+      max-width: 48vw;
+      max-height: 48vw;
+      border-radius: 50%;
+      border: 5px solid #f7df91;
+      cursor: pointer;
+      color: #875a15;
+      font-size: 19px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      background: radial-gradient(
+        circle,
+        #fff1bd,
+        #e9c765 55%,
+        #bd8528 85%,
+        #fbe6a0
+      );
+      box-shadow:
+        inset 0 0 0 6px #f9e7a5,
+        inset 0 0 0 10px #c99a39,
+        0 5px 20px #88612655;
+      animation: pulse 2s infinite;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes pulse {
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    #hint {
+      position: absolute;
+      z-index: 2;
+      bottom: 35px;
+      left: 15px;
+      right: 15px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #946b32;
+    }
+
+    /* НЕГИЗГИ ЧАКЫРУУ */
+    #invitation {
+      display: none;
+      width: 100%;
+      overflow: hidden;
+      animation: appear 1s ease;
+    }
+
+    #invitation.show {
+      display: block;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .heading {
+      padding: 45px 20px 35px;
+      text-align: center;
+      background: #fff6e8;
+    }
+
+    .heading p {
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 4px;
+    }
+
+    .heading h1 {
+      font-size: clamp(32px, 8vw, 50px);
+      line-height: 1.25;
+      margin: 18px 0;
+      color: #d88d31;
+    }
+
+    .heading .subtitle {
+      font-size: 23px;
+      font-style: italic;
+    }
+
+    .gold-line {
+      width: 140px;
+      height: 3px;
+      margin: 24px auto 0;
+      background: linear-gradient(
+        to right,
+        transparent,
+        #d4ad54,
+        transparent
+      );
+    }
+
+    /* СЕН ЖҮКТӨГӨН ЧАКЫРУУ СҮРӨТТӨРҮ */
+    .invitation-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* МААРАКЕНИН МААЛЫМАТТАРЫ */
+    .details {
+      padding: 45px 22px;
+      text-align: center;
+      background: linear-gradient(
+        #fff8ed,
+        #f4dfbb
+      );
+    }
+
+    .details h2 {
+      margin: 0 0 30px;
+      font-size: 32px;
+      color: #d58c32;
+    }
+
+    .detail {
+      margin: 25px auto;
+      max-width: 450px;
+      font-size: 20px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 7px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #9b7741;
+      text-transform: uppercase;
+    }
+
+    .address {
+      font-size: 17px;
+    }
+
+    /* МУЗЫКА БАСКЫЧЫ */
+    #musicButton {
+      display: none;
+      position: fixed;
+      z-index: 20;
+      right: 14px;
+      bottom: 20px;
+      padding: 13px 17px;
+      border: 1px solid #d8b76c;
+      border-radius: 30px;
+      background: #fff6e8;
+      color: #865e24;
+      font-size: 14px;
+      box-shadow: 0 3px 12px #0002;
+      cursor: pointer;
+    }
+
+    #musicButton.show {
+      display: block;
+    }
+
+    .footer {
+      padding: 35px 15px 55px;
+      text-align: center;
+      font-size: 21px;
+      font-style: italic;
+      background: #fff8ed;
+    }
+
+    @media (min-width: 760px) {
+      .invitation-image {
+        max-width: 760px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 1. БАШЫНДА КОНВЕРТ ГАНА КӨРҮНӨТ -->
+  <section id="cover">
+
+    <img
+      src="assets/envelope-cover.jpg"
+      alt="Кымбаттын мааракесине арналган конверт"
+    >
+
+    <button id="openButton" aria-label="Конвертти ачуу">
+      АЧУУ
+    </button>
+
+    <div id="hint">
+      ЧАКЫРУУНУ АЧУУ ҮЧҮН МӨӨРДҮ БАСЫҢЫЗ
+    </div>
+
+  </section>
+
+  <!-- 2. ЧАКЫРУУНУН БАРДЫК БАРАКТАРЫ -->
+  <main id="invitation">
+
+    <header class="heading">
+      <p>ЧАКЫРУУ</p>
+
+      <h1>
+        Кымбаттын<br>
+        60 жаш мааракеси
+      </h1>
+
+      <div class="subtitle">
+        Сиздерди күтөбүз!
+      </div>
+
+      <div class="gold-line"></div>
+    </header>
+
+    <!-- 3. БИРИНЧИ ЧАКЫРУУ СҮРӨТҮ -->
+    <img
+      class="invitation-image"
+      src="assets/page-2.jpeg"
+      alt="60 жаш мааракесине куттуктоо"
+    >
+
+    <!-- 4. БОЗ ҮЙ ЖАНА ЧАКЫРУУ СӨЗҮ -->
+    <img
+      class="invitation-image"
+      src="assets/page-3.jpeg"
+      alt="Кымбаттын мааракесине чакыруу"
+      loading="lazy"
+    >
+
+    <!-- 5. МААРАКЕНИН КҮНҮ ЖАНА ДАРЕГИ -->
+    <section class="details">
+
+      <h2>Мааракенин дареги</h2>
+
+      <div class="detail">
+        <span class="label">КҮНҮ</span>
+        16-ноябрь, 2026-жыл
+      </div>
+
+      <div class="detail">
+        <span class="label">УБАКТЫСЫ</span>
+        16:00
+      </div>
+
+      <div class="detail">
+        <span class="label">РЕСТОРАН</span>
+        «Алтын Арашан»
+      </div>
+
+      <div class="detail address">
+        <span class="label">ДАРЕГИ</span>
+        Бишкек шаары, 7-Апрель көчөсү
+
+        <br><br>
+
+        Алматинская көчөсүнөн Ахунбаев
+        көчөсүндөгү айланмага жетпей,
+        оң тарапта.
+      </div>
+
+    </section>
+
+    <!-- 6. ТӨРТҮНЧҮ СҮРӨТ -->
+    <img
+      class="invitation-image"
+      src="assets/page-4.jpeg"
+      alt="Мааракенин күнү, убактысы жана дареги"
+      loading="lazy"
+    >
+
+    <!-- 7. АКЫРКЫ СҮРӨТ -->
+    <img
+      class="invitation-image"
+      src="assets/page-5.jpeg"
+      alt="Конокторго арналган чакыруу"
+      loading="lazy"
+    >
+
+    <footer class="footer">
+      Ак дасторкондо жолугушканча!
+    </footer>
+
+  </main>
+
+  <!-- 8. БЕК БОРБИЕВДИН МУЗЫКАСЫ -->
+  <audio id="music" loop preload="auto" playsinline>
+    <source
+      src="assets/bek-borbiev.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
+
+  <button id="musicButton">
+    ♫ Музыканы токтотуу
+  </button>
+
+  <!-- 9. КОНВЕРТТИ АЧУУ ЖАНА МУЗЫКАНЫ БАШКАРУУ -->
+  <script>
+    const cover = document.getElementById("cover");
+    const openButton = document.getElementById("openButton");
+    const invitation = document.getElementById("invitation");
+    const music = document.getElementById("music");
+    const musicButton = document.getElementById("musicButton");
+
+    let opened = false;
+
+    openButton.addEventListener("click", async function () {
+      if (opened) return;
+      opened = true;
+
+      // Чакыруу барактарын көрсөтүү
+      invitation.classList.add("show");
+
+      // Музыка баскычын көрсөтүү
+      musicButton.classList.add("show");
+
+      // Конвертти акырын өчүрүү
+      cover.style.opacity = "0";
+      cover.style.transform = "scale(1.04)";
+
+      // Колдонуучу басканда музыканы иштетүү
+      try {
+        music.volume = 0.8;
+        await music.play();
+
+        musicButton.textContent = "♫ Музыканы токтотуу";
+      } catch (error) {
+        musicButton.textContent = "♫ Музыканы ойнотуу";
+      }
+
+      // Конвертти экрандан алып салуу
+      setTimeout(function () {
+        cover.style.display = "none";
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }, 800);
+    });
+
+    // Музыканы токтотуу жана кайра ойнотуу
+    musicButton.addEventListener("click", async function () {
+      if (music.paused) {
+        try {
+          await music.play();
+          musicButton.textContent = "♫ Музыканы токтотуу";
+        } catch (error) {
+          musicButton.textContent = "♫ Кайра ойнотуу";
+        }
+      } else {
+        music.pause();
+        musicButton.textContent = "♫ Музыканы ойнотуу";
+      }
+    });
+  </script>
+
+</body>
+</html>
